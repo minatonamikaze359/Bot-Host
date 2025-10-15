@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Downloader | Full Info</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: url('../BdhxDXFhVMou.moe/gwLQwJha8kKE.png') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container, .follow-screen {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 30px;
+      width: 400px;
+      color: white;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      outline: none;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .fetch-btn {
+      width: 100%;
+      background: #E1306C;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 0;
+      font-size: 15px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .fetch-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .links button {
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      margin: 5px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .links button:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    video, img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    p {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 10px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    a.download {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: #0b74de;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all .3s ease;
+      font-size: 13px;
+    }
+
+    a.download:hover {
+      background: #095fc2;
+      transform: scale(1.05);
+    }
+
+    .loading {
+      display: none;
+      font-size: 14px;
+      margin-top: 10px;
+      color: #ffb6c1;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.5; }
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #fff;
+      opacity: 0.8;
+    }
+
+    .follow-screen h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .follow-btn {
+      background: #25D366;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .follow-btn:hover {
+      background: #1ebe5d;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Follow screen -->
+  <div class="follow-screen" id="followScreen">
+    <h2>📣 Follow Our WhatsApp Channel To Use This Tool</h2>
+    <p style="font-size:14px;color:#eee;">Stay updated with the latest tools and news!</p>
+    <button class="follow-btn" onclick="followChannel()">💚 Follow Channel</button>
+  </div>
+
+  <!-- Instagram Downloader -->
+  <div class="container" id="mainContainer" style="display:none;">
+    <h1>📸 Instagram Downloader</h1>
+    <input type="text" id="videoURL" placeholder="Paste Instagram link here...">
+    <button class="fetch-btn" onclick="fetchInstagramData()">🚀 Fetch Video</button>
+
+    <div class="links">
+      <button onclick="window.open('https://whatsapp.com/channel/0029VaZb8IQ9mrGc8tGETf2i')">💚 Join WhatsApp Channel</button>
+    </div>
+
+    <div class="loading" id="loading">⏳ Fetching Instagram data...</div>
+    <div class="result" id="result"></div>
+
+    <footer>Developed By — SASUKE UCHIA</footer>
+  </div>
+
+  <script>
+    const videoInput = document.getElementById("videoURL");
+    const result = document.getElementById("result");
+    const loading = document.getElementById("loading");
+
+    function followChannel() {
+      window.open("https://whatsapp.com/channel/0029VaZb8IQ9mrGc8tGETf2i", "_blank");
+      document.getElementById("followScreen").style.display = "none";
+      document.getElementById("mainContainer").style.display = "block";
+    }
+
+    async function fetchInstagramData() {
+      const url = videoInput.value.trim();
+      if (!url) return alert("Please paste an Instagram link first!");
+
+      result.innerHTML = "";
+      loading.style.display = "block";
+
+      try {
+        const apiURL = `https://vihangayt.me/download/instagram?url=${encodeURIComponent(url)}`;
+        const res = await fetch(apiURL);
+        const data = await res.json();
+        loading.style.display = "none";
+
+        if (!data.status || !data.data) {
+          result.innerHTML = "<p>⚠️ Unable to fetch Instagram video. Try another link.</p>";
+          return;
+        }
+
+        const vid = data.data.url || data.data.data?.[0]?.url;
+        const thumb = data.data.thumbnail || "";
+        const desc = data.data.caption || "No caption available";
+
+        result.innerHTML = `
+          <h3>🎬 Video</h3>
+          <video controls src="${vid}"></video>
+          <a class="download" href="${vid}" download="instagram_video_${Date.now()}.mp4">⬇️ Download Video</a>
+
+          ${thumb ? `<h3>🖼️ Thumbnail</h3><img src="${thumb}"><a class="download" href="${thumb}" download="instagram_thumb_${Date.now()}.jpg">⬇️ Download Image</a>` : ""}
+
+          <h3>📝 Caption</h3>
+          <p>${desc}</p>
+          <a class="download" href="data:text/plain;charset=utf-8,${encodeURIComponent(desc)}" download="instagram_caption.txt">⬇️ Download Caption</a>
+        `;
+      } catch (e) {
+        console.error(e);
+        loading.style.display = "none";
+        result.innerHTML = "<p>❌ Error fetching Instagram video!</p>";
+      }
+    }
+  </script>
+</body>
+  </html>
