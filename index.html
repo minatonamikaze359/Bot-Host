@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker's Hideout | GitHub Profile Searcher</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/x-icon">
+<style>
+  body {
+    font-family: 'Orbitron', sans-serif;
+    background: #080808;
+    color: #00ffcc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  h1 { text-align:center; font-size:3rem; background:linear-gradient(90deg,#00ffcc,#ff00cc,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 25px rgba(0,255,204,0.9); margin-bottom:20px; }
+  .follow-container, .search-container, .profile { margin-top:20px; text-align:center; }
+  .follow-btn, button {
+    padding:12px 25px;
+    font-size:1.2rem;
+    font-weight:bold;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    color:#000;
+    background:linear-gradient(90deg,#00ffcc,#ff00cc);
+    box-shadow:0 0 15px rgba(0,255,204,0.5);
+  }
+  .follow-btn:hover, button:hover { transform:scale(1.1) perspective(1000px) rotateX(5deg) rotateY(5deg); box-shadow:0 0 25px #00ffcc,0 0 60px #ff00cc; }
+  input { padding:10px; border-radius:8px; border:1px solid #00ffcc; background:#0b0b0b; color:#fff; width:250px; margin-right:10px; }
+  .profile { margin-top:20px; padding:20px; background:rgba(255,255,255,0.05); border:1px solid #00ffcc; border-radius:12px; max-width:500px; width:100%; }
+  img.avatar { width:100px; border-radius:50%; margin-bottom:10px; }
+  p { margin:6px 0; color:#d1d5db; }
+  a { color:#06b6d4; text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  #search-section { display:none; }
+</style>
+</head>
+<body>
+<h1>Welcome to Hacker's Hideout</h1>
+<p>Developed by SASUKE UCHIA</p>
+
+<div class="follow-container" id="follow-section">
+  <p>You must follow our WhatsApp channel to use this tool:</p>
+  <a href="https://whatsapp.com/channel/0029VaZb8IQ9mrGc8tGETf2i" target="_blank">
+    <button class="follow-btn" onclick="unlockTool()">Follow Hacker's Hideout Channel</button>
+  </a>
+</div>
+
+<div id="search-section">
+  <div class="search-container">
+    <input type="text" id="username" placeholder="Enter GitHub username">
+    <button onclick="searchProfile()">Search</button>
+  </div>
+  <div id="result"></div>
+</div>
+
+<script>
+function unlockTool() {
+  // Hide follow section and show searcher
+  document.getElementById('follow-section').style.display = 'none';
+  document.getElementById('search-section').style.display = 'block';
+}
+
+async function searchProfile() {
+  const username = document.getElementById('username').value.trim();
+  const resultDiv = document.getElementById('result');
+  if(!username) {
+    alert("Please enter a GitHub username.");
+    return;
+  }
+
+  resultDiv.innerHTML = '<p>Loading...</p>';
+  try {
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    if(res.status === 404) {
+      resultDiv.innerHTML = '<p>User not found!</p>';
+      return;
+    }
+    const data = await res.json();
+    const joined = new Date(data.created_at).toLocaleDateString();
+    const updated = new Date(data.updated_at).toLocaleDateString();
+
+    resultDiv.innerHTML = `
+      <div class="profile">
+        <img src="${data.avatar_url}" alt="Avatar" class="avatar">
+        <h2>${data.name || data.login}</h2>
+        <p><strong>Username:</strong> ${data.login}</p>
+        <p><strong>Bio:</strong> ${data.bio || "N/A"}</p>
+        <p><strong>Public Repos:</strong> ${data.public_repos}</p>
+        <p><strong>Followers:</strong> ${data.followers}</p>
+        <p><strong>Following:</strong> ${data.following}</p>
+        <p><strong>Account Created:</strong> ${joined}</p>
+        <p><strong>Last Updated:</strong> ${updated}</p>
+        <p><a href="${data.html_url}" target="_blank">View Profile on GitHub</a></p>
+      </div>
+    `;
+  } catch(err) {
+    console.error(err);
+    resultDiv.innerHTML = '<p>Error fetching data!</p>';
+  }
+}
+</script>
+</body>
+<M/html>
